@@ -1,0 +1,28 @@
+class Lab8:
+    def coin_change(self, coins, amount):
+        n = len(coins)
+        dp = [[None] * (amount + 1) for _ in range(n)]
+
+        if amount == 0:
+            return 0
+        ans = self.find(coins, amount, 0, dp)
+
+        return ans if ans != float('inf') else -1
+
+    def find(self, coins, tar, ind, dp):
+        if tar == 0:
+            return 0
+        if ind >= len(coins):
+            return float('inf')
+        if dp[ind][tar] is not None:
+            return dp[ind][tar]
+
+        take = float('inf')
+        ntake = float('inf')
+
+        if coins[ind] <= tar:
+            take = 1 + self.find(coins, tar - coins[ind], ind, dp)
+        ntake = self.find(coins, tar, ind + 1, dp)
+
+        dp[ind][tar] = min(take, ntake)
+        return dp[ind][tar]
